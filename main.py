@@ -1,26 +1,29 @@
 import sys
 
 import pygame as pg
-from winsound import Beep
+from pygame import mixer
 
-FREQUENCY = [
-    [16.352, 18.354, 20.602, 21.827, 24.5, 27.5, 30.868, 17.324, 19.445, 23.125, 25.957, 29.135],
-    [32.703, 36.708, 41.203, 43.654, 48.999, 55, 61.735, 34.648, 38.891, 46.249, 51.913, 58.27],
-    [65.406, 73.416, 82.407, 87.307, 97.999, 110, 123.47, 69.296, 77.782, 92.499, 103.83, 116.54],
-    [130.81, 146.83, 164.81, 174.61, 196, 220, 246.94, 138.59, 155.56, 185, 207.65, 233.08],
-    [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 277.18, 311.13, 369.99, 415.3, 466.16],
-    [523.25, 587.33, 659.26, 698.46, 783.99, 880, 987.77, 554.37, 622.25, 739.99, 830.61, 932.33],
-    [1046.5, 1174.7, 1318.5, 1396.9, 1568, 1760, 1975.5, 1108.7, 1244.5, 1480, 1661.2, 1864.7],
-    [2093, 2349.3, 2637, 2793.8, 3136, 3520, 3951.1, 2217.5, 2489, 2960, 3322.4, 3729.3],
-    [4186, 4698.6, 5274, 5587.7, 6271.9, 7040, 7902.1, 4434.9, 4978, 5919.9, 6644.9, 7458.6],
-    [8372, 9397.3, 10548, 11175, 12544, 14080, 15804, 8869.8, 9956.1, 11840, 13290, 14917]
-]
+from Color import Color
+from Setting import Setting
 
 
 def main():
-    pitch = 5
+    pitch = 4
+    key_time = [[0 for _ in range(8)], [0 for _ in range(7)]]
+    pitch_time = [0, 0]
     pg.init()
-    display = pg.display.set_mode((300, 300))
+    mixer.init()
+    pg.display.set_caption('Simple Sheet Music Maker')
+    pg.display.set_icon(pg.image.load('assets/icon/favicon.ico'))
+    font = pg.font.Font('assets/font/SpaceJaeger-BW2pn.otf', 24)
+    surface = pg.display.set_mode((Setting.WIDTH, Setting.HEIGHT))
+    surface.fill(Color.BACKGROUND)
+    tools = ['file', 'save', 'play', 'stop', 'record', 'edit']
+    t_keys = ['Q', 'W', 'E', 'R', 'T', 'Y']
+    text = font.render('pitch', True, Color.WHITE, None)
+    rect = text.get_rect()
+    rect.center = (Setting.PITCH_X, Setting.PITCH_Y)
+    surface.blit(text, rect)
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -28,23 +31,120 @@ def main():
                 sys.exit()
             elif event.type == pg.KEYDOWN:
                 match event.key:
-                    case pg.K_z: Beep(int(FREQUENCY[pitch][0]), 250)
-                    case pg.K_x: Beep(int(FREQUENCY[pitch][1]), 250)
-                    case pg.K_c: Beep(int(FREQUENCY[pitch][2]), 250)
-                    case pg.K_v: Beep(int(FREQUENCY[pitch][3]), 250)
-                    case pg.K_b: Beep(int(FREQUENCY[pitch][4]), 250)
-                    case pg.K_n: Beep(int(FREQUENCY[pitch][5]), 250)
-                    case pg.K_m: Beep(int(FREQUENCY[pitch][6]), 250)
-                    case pg.K_s: Beep(int(FREQUENCY[pitch][7]), 250)
-                    case pg.K_x: Beep(int(FREQUENCY[pitch][8]), 250)
-                    case pg.K_g: Beep(int(FREQUENCY[pitch][9]), 250)
-                    case pg.K_h: Beep(int(FREQUENCY[pitch][10]), 250)
-                    case pg.K_j: Beep(int(FREQUENCY[pitch][11]), 250)
-                    case pg.K_COMMA: pitch -= 1
-                    case pg.K_PERIOD: pitch += 1
-            # frequency = 500
-            # duration = 2000
-            # Beep(frequency, duration)
+                    case pg.K_z:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\1.mp3')
+                        mixer.music.play()
+                        key_time[0][0] = Setting.PRESS_TIME
+                    case pg.K_x:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\2.mp3')
+                        mixer.music.play()
+                        key_time[0][1] = Setting.PRESS_TIME
+                    case pg.K_c:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\3.mp3')
+                        mixer.music.play()
+                        key_time[0][2] = Setting.PRESS_TIME
+                    case pg.K_v:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\4.mp3')
+                        mixer.music.play()
+                        key_time[0][3] = Setting.PRESS_TIME
+                    case pg.K_b:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\5.mp3')
+                        mixer.music.play()
+                        key_time[0][4] = Setting.PRESS_TIME
+                    case pg.K_n:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\6.mp3')
+                        mixer.music.play()
+                        key_time[0][5] = Setting.PRESS_TIME
+                    case pg.K_m:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\0\\7.mp3')
+                        mixer.music.play()
+                        key_time[0][6] = Setting.PRESS_TIME
+                    case pg.K_s:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\1\\1.mp3')
+                        mixer.music.play()
+                        key_time[1][1] = Setting.PRESS_TIME
+                    case pg.K_d:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\1\\2.mp3')
+                        mixer.music.play()
+                        key_time[1][2] = Setting.PRESS_TIME
+                    case pg.K_g:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\1\\4.mp3')
+                        mixer.music.play()
+                        key_time[1][4] = Setting.PRESS_TIME
+                    case pg.K_h:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\1\\5.mp3')
+                        mixer.music.play()
+                        key_time[1][5] = Setting.PRESS_TIME
+                    case pg.K_j:
+                        mixer.music.load(f'assets\\audio\\piano\\{pitch}\\1\\6.mp3')
+                        mixer.music.play()
+                        key_time[1][6] = Setting.PRESS_TIME
+                    case pg.K_DOWN | pg.K_LEFT:
+                        pitch = max(1, pitch - 1)
+                        pitch_time[0] = Setting.PRESS_TIME
+                    case pg.K_UP | pg.K_RIGHT:
+                        pitch = min(7, pitch + 1)
+                        pitch_time[1] = Setting.PRESS_TIME
+
+        # Render Tools
+        for i, tool in enumerate(tools):
+            pg.draw.rect(surface, Color.BACKGROUND,
+                         pg.Rect(Setting.TOOL_SPACE * i + Setting.TOOL_X - 5, Setting.TOOL_Y - 5, 60, 60))
+            img = pg.transform.scale(pg.image.load(f'assets/image/{tool}.png').convert_alpha(), (50, 50))
+            img.set_alpha(100)
+            surface.blit(img, (Setting.TOOL_SPACE * i + Setting.TOOL_X, Setting.TOOL_Y))
+            pg.draw.circle(surface, Color.WHITE,
+                           (Setting.TOOL_SPACE * i + Setting.TOOL_X + 50, Setting.TOOL_Y + 45), 16, 0)
+            text = font.render(t_keys[i], True, Color.BLACK, None)
+            rect = text.get_rect()
+            rect.center = (Setting.TOOL_SPACE * i + Setting.TOOL_X + 50, Setting.TOOL_Y + 45)
+            surface.blit(text, rect)
+
+        # Render Piano Keys
+        w_keys = ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+        b_keys = ['A', 'S', 'D', 'F', 'G', 'H', 'J']
+        for i in range(7):
+            pg.draw.rect(surface, Color.PRESS_W if key_time[0][i] else Color.PIANO_W,
+                         pg.Rect(64 * i + Setting.MARGIN_LEFT, 260, 60, 250))
+            text = font.render(w_keys[i], True, Color.WHITE if key_time[0][i] else Color.BLACK, None)
+            rect = text.get_rect()
+            rect.center = (64 * i + Setting.MARGIN_LEFT + 30, 460)
+            surface.blit(text, rect)
+            if key_time[0][i]:
+                key_time[0][i] -= 1
+            if i == 0 or i == 3:
+                continue
+            pg.draw.rect(surface, Color.PRESS_B if key_time[1][i] else Color.PIANO_B,
+                         pg.Rect(64 * i + Setting.MARGIN_LEFT - 20, 260, 40, 130))
+            text = font.render(b_keys[i], True, Color.WHITE, None)
+            rect = text.get_rect()
+            rect.center = (64 * i + Setting.MARGIN_LEFT, 350)
+            surface.blit(text, rect)
+            if key_time[1][i]:
+                key_time[1][i] -= 1
+
+        # Render Pitch
+        pg.draw.rect(surface, Color.BACKGROUND, pg.Rect(Setting.PITCH_X + 60, Setting.PITCH_Y - 15, 30, 30))
+        text = font.render(str(pitch), True, Color.WHITE, None)
+        rect = text.get_rect()
+        rect.center = (Setting.PITCH_X + 75, Setting.PITCH_Y)
+        surface.blit(text, rect)
+        if pitch_time[0]:
+            img = pg.transform.scale(pg.image.load('assets/image/left_on.png').convert_alpha(), (40, 40))
+            pitch_time[0] -= 1
+        else:
+            img = pg.transform.scale(pg.image.load('assets/image/left.png').convert_alpha(), (40, 40))
+        surface.blit(img, (Setting.PITCH_X - 105, Setting.PITCH_Y - 20))
+        if pitch_time[1]:
+            img = pg.transform.scale(pg.image.load('assets/image/right_on.png').convert_alpha(), (40, 40))
+            pitch_time[1] -= 1
+        else:
+            img = pg.transform.scale(pg.image.load('assets/image/right.png').convert_alpha(), (40, 40))
+        surface.blit(img, (Setting.PITCH_X + 105, Setting.PITCH_Y - 20))
+
+        # Update
+        pg.display.update()
+        pg.time.Clock().tick(30)
 
 
 if __name__ == '__main__':
