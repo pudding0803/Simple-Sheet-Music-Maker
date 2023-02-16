@@ -6,6 +6,7 @@ from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PyQt6.QtWidgets import QFileDialog
 
 from ui import Ui_MainWindow
 
@@ -22,9 +23,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.audios = {key: QAudioOutput() for key in self.w_keys + self.b_keys}
         for player, audio in zip(self.players.values(), self.audios.values()):
             player.setAudioOutput(audio)
-        # filename, filetype = QFileDialog.getOpenFileName(self, '選擇資料集', './',
-        #                                                  '文字文件 (*.txt)')
-        # print(filename, filetype)
 
     def keyPressEvent(self, event):
         if QKeyEvent.isAutoRepeat(event):
@@ -45,6 +43,22 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.pitch = min(7, self.pitch + 1)
                 self.ui.pitch.setText(str(self.pitch))
                 threading.Thread(target=self.pitch_on, args=('right',)).start()
+            case Qt.Key.Key_Q.value:
+                threading.Thread(target=self.tool_on, args=('file',)).start()
+                filename, filetype = QFileDialog.getOpenFileName(self, '選擇樂譜', './', '文字文件 (*.txt)')
+                print(filename, filetype)
+            case Qt.Key.Key_W.value:
+                threading.Thread(target=self.tool_on, args=('save',)).start()
+            case Qt.Key.Key_E.value:
+                threading.Thread(target=self.tool_on, args=('stop',)).start()
+            case Qt.Key.Key_R.value:
+                threading.Thread(target=self.tool_on, args=('play',)).start()
+                img = 'pause' if self.ui.img_play.styleSheet() == 'border-image: url("assets/image/play.png");' else 'play'
+                self.ui.img_play.setStyleSheet(f'border-image: url("assets/image/{img}.png");')
+            case Qt.Key.Key_T.value:
+                threading.Thread(target=self.tool_on, args=('record',)).start()
+            case Qt.Key.Key_Y.value:
+                threading.Thread(target=self.tool_on, args=('edit',)).start()
 
     def key_on(self, key: str):
         getattr(self.ui, f'key_{key}').setStyleSheet(
@@ -57,8 +71,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def pitch_on(self, direction: str):
         getattr(self.ui, f'img_{direction}').setStyleSheet(f'border-image: url("assets/image/{direction}_on.png");')
-        time.sleep(0.3)
+        time.sleep(0.2)
         getattr(self.ui, f'img_{direction}').setStyleSheet(f'border-image: url("assets/image/{direction}.png");')
+
+    def tool_on(self, tool: str):
+        x, y = self.ui.img_file.x(), self.ui.img_file.y()
+        getattr(self.ui, f'img_{tool}').setGeometry(x - 5, y - 5, 60, 60)
+        time.sleep(0.1)
+        getattr(self.ui, f'img_{tool}').setGeometry(x, y, 50, 50)
 
 
 def main():
