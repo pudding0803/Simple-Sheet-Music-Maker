@@ -4,6 +4,7 @@ import time
 
 from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt, QUrl
+from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 
 from ui import Ui_MainWindow
@@ -26,6 +27,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # print(filename, filetype)
 
     def keyPressEvent(self, event):
+        if QKeyEvent.isAutoRepeat(event):
+            return
         match event.key():
             case Qt.Key.Key_Z.value | Qt.Key.Key_X.value | Qt.Key.Key_C.value | Qt.Key.Key_V.value | \
                  Qt.Key.Key_B.value | Qt.Key.Key_N.value | Qt.Key.Key_M.value | Qt.Key.Key_S.value | \
