@@ -6,7 +6,7 @@ from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtCore import Qt, QUrl
 from PyQt6.QtGui import QKeyEvent
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtWidgets import QFileDialog
+from PyQt6.QtWidgets import QFileDialog, QGraphicsOpacityEffect
 
 from ui import Ui_MainWindow
 
@@ -23,6 +23,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.audios = {key: QAudioOutput() for key in self.w_keys + self.b_keys}
         for player, audio in zip(self.players.values(), self.audios.values()):
             player.setAudioOutput(audio)
+        self.t_keys = ['Q', 'W', 'E', 'R', 'T', 'Y']
+        self.tools = [True, False, True, False, True, False]
+        self.effects = [QGraphicsOpacityEffect() for _ in range(6)]
+        self.update_tools()
 
     def keyPressEvent(self, event):
         if QKeyEvent.isAutoRepeat(event):
@@ -44,21 +48,35 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.pitch.setText(str(self.pitch))
                 threading.Thread(target=self.pitch_on, args=('right',)).start()
             case Qt.Key.Key_Q.value:
-                threading.Thread(target=self.tool_on, args=('file',)).start()
-                filename, filetype = QFileDialog.getOpenFileName(self, '選擇樂譜', './', '文字文件 (*.txt)')
-                print(filename, filetype)
+                if self.tools[0]:
+                    threading.Thread(target=self.tool_on, args=('file',)).start()
+                    filename, filetype = QFileDialog.getOpenFileName(self, '選擇樂譜', './', '文字文件 (*.txt)')
+                    self.ui.lb_path.setText(f'File: {filename}')
+                    self.tools[3] = self.tools[5] = True
+                    self.update_tools()
             case Qt.Key.Key_W.value:
-                threading.Thread(target=self.tool_on, args=('save',)).start()
+                if self.tools[1]:
+                    threading.Thread(target=self.tool_on, args=('save',)).start()
             case Qt.Key.Key_E.value:
-                threading.Thread(target=self.tool_on, args=('stop',)).start()
+                if self.tools[2]:
+                    threading.Thread(target=self.tool_on, args=('stop',)).start()
+                    for player in self.players.values():
+                        player.stop()
+                    self.ui.img_play.setStyleSheet(f'border-image: url("assets/image/play.png");')
             case Qt.Key.Key_R.value:
-                threading.Thread(target=self.tool_on, args=('play',)).start()
-                img = 'pause' if self.ui.img_play.styleSheet() == 'border-image: url("assets/image/play.png");' else 'play'
-                self.ui.img_play.setStyleSheet(f'border-image: url("assets/image/{img}.png");')
+                if self.tools[3]:
+                    threading.Thread(target=self.tool_on, args=('play',)).start()
+                    img = 'pause' if self.ui.img_play.styleSheet() == 'border-image: url("assets/image/play.png");' else 'play'
+                    self.ui.img_play.setStyleSheet(f'border-image: url("assets/image/{img}.png");')
+                    self.update_tools()
             case Qt.Key.Key_T.value:
-                threading.Thread(target=self.tool_on, args=('record',)).start()
+                for player in self.players.values():
+                    player.stop()
+                if self.tools[4]:
+                    threading.Thread(target=self.tool_on, args=('record',)).start()
             case Qt.Key.Key_Y.value:
-                threading.Thread(target=self.tool_on, args=('edit',)).start()
+                if self.tools[5]:
+                    threading.Thread(target=self.tool_on, args=('edit',)).start()
 
     def key_on(self, key: str):
         getattr(self.ui, f'key_{key}').setStyleSheet(
@@ -79,6 +97,11 @@ class MainWindow(QtWidgets.QMainWindow):
         getattr(self.ui, f'img_{tool}').setGeometry(x - 5, y - 5, 60, 60)
         time.sleep(0.1)
         getattr(self.ui, f'img_{tool}').setGeometry(x, y, 50, 50)
+
+    def update_tools(self):
+        for key, tool, effect in zip(self.t_keys, self.tools, self.effects):
+            effect.setOpacity(1 if tool else 0.3)
+            getattr(self.ui, f'tool_{key}').setGraphicsEffect(effect)
 
 
 def main():

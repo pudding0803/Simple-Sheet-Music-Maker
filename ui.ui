@@ -477,8 +477,8 @@
    <widget class="QWidget" name="tool_Q" native="true">
     <property name="geometry">
      <rect>
-      <x>75</x>
-      <y>85</y>
+      <x>80</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -538,8 +538,8 @@
    <widget class="QWidget" name="tool_W" native="true">
     <property name="geometry">
      <rect>
-      <x>185</x>
-      <y>85</y>
+      <x>190</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -599,8 +599,8 @@
    <widget class="QWidget" name="tool_E" native="true">
     <property name="geometry">
      <rect>
-      <x>295</x>
-      <y>85</y>
+      <x>300</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -660,8 +660,8 @@
    <widget class="QWidget" name="tool_R" native="true">
     <property name="geometry">
      <rect>
-      <x>405</x>
-      <y>85</y>
+      <x>410</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -721,8 +721,8 @@
    <widget class="QWidget" name="tool_T" native="true">
     <property name="geometry">
      <rect>
-      <x>515</x>
-      <y>85</y>
+      <x>520</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -779,11 +779,11 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="tool_T_2" native="true">
+   <widget class="QWidget" name="tool_Y" native="true">
     <property name="geometry">
      <rect>
-      <x>625</x>
-      <y>85</y>
+      <x>630</x>
+      <y>140</y>
       <width>71</width>
       <height>67</height>
      </rect>
@@ -840,6 +840,55 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QLabel" name="lb_description">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>360</y>
+      <width>231</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 24px &quot;Consolas&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Fermata: [ ]
+
+Rest: [0]</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lb_path">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>621</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 18px &quot;Consolas&quot;;</string>
+    </property>
+    <property name="text">
+     <string>file:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -847,7 +896,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
